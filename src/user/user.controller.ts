@@ -22,7 +22,7 @@ export class UserController {
     private userService: UserService,
     private readonly mailerService: MailerService,
   ) {}
-
+// ADD try catch blocs for all methods handling the status codes coordinately to the response.
   @Get()
   async viewallusers(): Promise<User[]> {
     return this.userService.getAllUsers();
@@ -42,6 +42,7 @@ export class UserController {
     @Body() userdata: UserDto,
     @Body('ToMail') Mails: Record<string, string>,
   ): Promise<User> {
+    //replace in the mail service adaépting the parameters and use it directly 
     const sendEmail = (body: Record<string, string>) => {
       const dto: SendEmailDto = {
         from: { name: 'Google', address: 'google@ofc.com' },
