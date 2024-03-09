@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 
-//  imports for User -------------------------
+//  imports for User
 import { UserDto } from './user.dto/user.dto';
 import { User } from './schema/user.schema';
-// -------------------------------------------
 
 //  imports for Mongoose
 import { InjectModel } from '@nestjs/mongoose';
 import * as Mongoose from 'mongoose';
-// -------------------------------------------
 
 @Injectable()
 export class UserService {
@@ -22,21 +20,21 @@ export class UserService {
     return users;
   }
 
-  async getUser(numphone: string): Promise<User | null> {
+  async findUser(numphone: string): Promise<User | null> {
     const user = await this.userModel.findOne({ phone: numphone }).exec();
     return user ? user : null;
   }
 
-  async addUser(userdata: UserDto): Promise<User> {
+  async createUser(userdata: UserDto): Promise<User> {
     const res = await this.userModel.create(userdata);
     return res;
   }
 
-  async removeUser(phone: string) {
+  async deleteUser(phone: string) {
     await this.userModel.findOneAndDelete({ phone: `${phone}` });
   }
 
-  async modifyUser(phone: string, data: UserDto): Promise<User> {
+  async updateUser(phone: string, data: UserDto): Promise<User> {
     const updateUser = await this.userModel.findOneAndUpdate({ phone }, data, {
       new: true,
       runValidators: true,
