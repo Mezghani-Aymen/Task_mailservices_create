@@ -8,6 +8,7 @@ import {
   Param,
   Post,
   Put,
+  Res,
 } from '@nestjs/common';
 
 // User  Imports---------------------------------------------
@@ -18,6 +19,8 @@ import { UserService } from './user.service';
 
 import { MailerService } from 'src/mailer/mailer.service';
 import { SendEmailDto } from 'src/mailer/mail.interface';
+
+import { response } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -34,7 +37,10 @@ export class UserController {
   }
 
   @Get('/:phone')
-  async viewuser(@Param('phone') phone: string): Promise<User | null> {
+  async viewuser(
+    @Param('phone') phone: string,
+    @Res() response,
+  ): Promise<User | null> {
     try {
       if (this.userService.findUser(phone) === null) {
         return;
@@ -45,7 +51,7 @@ export class UserController {
   }
 
   @Post('/add')
-  async createuser(@Body() userdata: UserDto): Promise<User> {
+  async createuser(@Body() userdata: UserDto, @Res() response): Promise<User> {
     try {
       const result = await this.userService.createUser(userdata);
       if (result) {
@@ -55,7 +61,7 @@ export class UserController {
   }
 
   @Delete('/remove/:phone')
-  async deleteuser(@Param('phone') phone: string) {
+  async deleteuser(@Param('phone') phone: string, @Res() response) {
     try {
       await this.userService.deleteUser(phone);
     } catch (error) {}
@@ -65,6 +71,7 @@ export class UserController {
   async updateuser(
     @Param('phone') phone: string,
     @Body() datauser: UserDto,
+    @Res() response,
   ): Promise<User> {
     try {
       return await this.userService.updateUser(phone, datauser);
